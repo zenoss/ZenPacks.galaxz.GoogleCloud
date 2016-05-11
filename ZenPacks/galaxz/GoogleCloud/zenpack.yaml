@@ -1,8 +1,5 @@
 name: ZenPacks.galaxz.GoogleCloud
 
-device_classes:
-    /Google
-
 classes:
     GoogleCloud:
         base: [zenpacklib.Device]
@@ -14,5 +11,5 @@ classes:
         label: Google Project
 
 class_relationships:
-    GoogleCloud 1:M Projects
+    - GoogleCloud 1:M Projects
 
