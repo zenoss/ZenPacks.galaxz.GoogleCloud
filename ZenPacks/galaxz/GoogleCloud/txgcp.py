@@ -48,6 +48,22 @@ class Client(object):
 
         returnValue(json.loads(r))
 
+    @inlineCallbacks
+    def instances(self, zone):
+        token = yield self.get_token(
+            scope="https://www.googleapis.com/auth/compute.readonly")
+
+        url = 'https://www.googleapis.com/compute/v1/projects/{}/zones/{}/instances'.format(
+            self.project_id,
+            zone)
+
+        r = yield getPage(
+            url,
+            method="GET",
+            headers={"Authorization": "Bearer {}".format(token)})
+
+        returnValue(json.loads(r))
+
 
 def b64encode(msg):
     return base64.urlsafe_b64encode(msg.rstrip('='))

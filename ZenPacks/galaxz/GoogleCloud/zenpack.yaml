@@ -1,15 +1,35 @@
 name: ZenPacks.galaxz.GoogleCloud
 
+zProperties:
+  DEFAULTS:
+    category: Google Cloud Platform
+
+  zGoogleCloudProjectId: {}
+  zGoogleCloudClientEmail: {}
+  zGoogleCloudPrivateKey:
+    type: lines    
+
+
+device_classes:
+  /Google/Cloud:
+    zProperties:
+      zPythonClass: ZenPacks.galaxz.GoogleCloud.Project
+      zCollectorPlugins:
+        - google.cloud.Project
+
+
 classes:
-    GoogleCloud:
+    Project:
         base: [zenpacklib.Device]
-        label: Google Cloud
+        label: Google Cloud Project
+        short_label: Project
 
 
-    Projects:
+    Instance:
         base: [zenpacklib.Component]
-        label: Google Project
+        label: Google Cloud Compute Instance
+        short_label: Compute Instance
+
 
 class_relationships:
-    - GoogleCloud 1:M Projects
-
+    - Project 1:MC Instance
