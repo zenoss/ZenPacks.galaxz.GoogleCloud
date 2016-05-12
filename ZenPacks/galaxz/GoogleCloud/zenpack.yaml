@@ -19,17 +19,44 @@ device_classes:
 
 
 classes:
-    Project:
-        base: [zenpacklib.Device]
-        label: Google Cloud Project
-        short_label: Project
+  Project:
+    base: [zenpacklib.Device]
+    label: Google Cloud Project
 
 
-    Instance:
-        base: [zenpacklib.Component]
-        label: Google Cloud Compute Instance
-        short_label: Compute Instance
+  Instance:
+    base: [zenpacklib.Component]
+    label: Compute Instance
+
+    properties:
+      description:
+        label: Description
+        order: 4.10
+
+      zone:
+        label: Zone
+        order: 4.20
+
+      machineType:
+        label: Machine Type
+        short_label: type
+        order: 4.30
+
+      diskCount:
+        label: Number of Disks
+        short_label: Disks
+        order: 4.40
+
+      nicCount:
+        label: Number of NICs
+        short_label: NICs
+        order: 4.50
+
+      status:
+        label: Instance Status
+        short_label: Status
+        order: 4.60
 
 
 class_relationships:
-    - Project 1:MC Instance
+  - Project 1:MC Instance

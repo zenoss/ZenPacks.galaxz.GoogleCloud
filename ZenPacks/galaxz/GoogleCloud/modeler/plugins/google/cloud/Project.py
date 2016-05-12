@@ -12,6 +12,10 @@ from ZenPacks.galaxz.GoogleCloud import txgcp
 
 
 class Project(PythonPlugin):
+
+    relname = "instances"
+    modname = "ZenPacks.galaxz.GoogleCloud.Instance"
+
     required_properties = (
         'zGoogleCloudProjectId',
         'zGoogleCloudClientEmail',
@@ -34,16 +38,28 @@ class Project(PythonPlugin):
         instances = []
 
         zones = yield client.zones()
-        import pdb; pdb.set_trace()
-        for zone in zones:
-            r = yield client.instances(zone=zone["id"])
-            instances.extend(r)
+        for zone in zones['items']:
+            r = yield client.instances(zone=zone["name"])
+            if "items" in r:
+                instances.extend(r['items'])
 
-        returnValue(instances)
+        returnValue({"instances": instances})
 
     def process(self, device, results, unused):
         LOG.info("%s: processing data", device.id)
 
-        import pdb; pdb.set_trace()
+        rm = self.relMap()
 
-        return None
+        for instance in results["instances"]:
+            rm.append(self.objectMap({
+                "id": self.prepId("instance-{}".format(instance["id"])),
+                "title": instance["name"],
+                "description": instance.get("description"),
+                "zone": instance.get("zone", "").split("/")[-1],
+                "machineType": instance.get("machineType", "").split("/")[-1],
+                "diskCount": len(instance.get("disks", [])),
+                "nicCount": len(instance.get("networkInterfaces", [])),
+                "status": instance.get("status"),
+                }))
+
+        return rm
